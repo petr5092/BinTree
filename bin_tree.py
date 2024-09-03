@@ -1,5 +1,5 @@
 class Node:
-    def __init__(self, value, par_node = None):
+    def __init__(self, value, par_node=None):
         self.value = value
         self.parent = par_node
         self.left_child: Node = None
@@ -16,12 +16,12 @@ class Node:
         if self.right_child:
             return True
         return False
-    
+
     def hasLeftChild(self):
-        if self.left_child  :
+        if self.left_child:
             return True
         return False
-    
+
     def hasBothChild(self):
         if self.right_child and self.left_child:
             return True
@@ -43,12 +43,6 @@ class Node:
         return False
 
 
-
-
-
-
-
-    
 class BinarySearchTree:
     def __init__(self):
         self.root = None
@@ -58,10 +52,10 @@ class BinarySearchTree:
     def insert(self, value):
         if not self.root:
             self.root = Node(value)
-        else:    
+        else:
             self._insert(self.root, value)
         self.count += 1
-            
+
     def _insert(self, cur_node, value):
         if cur_node.value > value:
             if not cur_node.left_child:
@@ -83,7 +77,12 @@ class BinarySearchTree:
     def _print_in_order(self, cur_node, answer_list):
         if cur_node.left_child:
             self._print_in_order(cur_node.left_child, answer_list)
-        answer_list.append([cur_node.value, cur_node.parent.value if cur_node.parent is not None else None])
+        answer_list.append(
+            [
+                cur_node.value,
+                cur_node.parent.value if cur_node.parent is not None else None,
+            ]
+        )
         if cur_node.right_child:
             self._print_in_order(cur_node.right_child, answer_list)
 
@@ -93,7 +92,6 @@ class BinarySearchTree:
             self._postOrder(self.root, answer_list)
             return answer_list
 
-        
     def _postOrder(self, cur_node, answer_list):
         if cur_node.left_child:
             self._postOrder(cur_node.left_child, answer_list)
@@ -114,16 +112,14 @@ class BinarySearchTree:
         if cur_node.right_child:
             self._preOrder(cur_node.right_child, answer_list)
 
-            
     def find(self, value):
         cur_node = self.root
         return self._find(value, cur_node)
 
-    
-    def _find (self, value, cur_node):
+    def _find(self, value, cur_node):
         if not cur_node:
             return False
-        
+
         if value == cur_node.value:
             return True
         elif value < cur_node.value:
@@ -135,7 +131,7 @@ class BinarySearchTree:
         cur_node = self.root
         return self._find_node(value, cur_node)
 
-    def _find_node (self, value, cur_node):
+    def _find_node(self, value, cur_node):
         if not cur_node:
             return None
         if value == cur_node.value:
@@ -155,19 +151,19 @@ class BinarySearchTree:
     def _delete_node(self, cur_node):
         if cur_node.isRoot():
             if cur_node.hasBothChild():
-                self._delleteIfRootHasBoth( cur_node)
+                self._delleteIfRootHasBoth(cur_node)
             elif cur_node.hasLeftChild():
-                self._delleteIfRootHasLeft( cur_node)
+                self._delleteIfRootHasLeft(cur_node)
             elif cur_node.hasRightChild():
-                self._delleteIfRootHasRight( cur_node)
+                self._delleteIfRootHasRight(cur_node)
             else:
                 self.root = None
         else:
             parent = cur_node.parent
             if cur_node.hasBothChild():
-                self._delleteIfHasBoth( parent, cur_node)
+                self._delleteIfHasBoth(parent, cur_node)
             elif cur_node.hasLeftChild():
-                self._delleteIfHasLeft( parent, cur_node)
+                self._delleteIfHasLeft(parent, cur_node)
             elif cur_node.hasRightChild():
                 self._delleteIfHasRight(parent, cur_node)
             else:
@@ -195,18 +191,18 @@ class BinarySearchTree:
         left_child = cur_node.left_child
         left_child.parent = None
         self.root = left_child
-        
+
     def _delleteIfRootHasRight(self, cur_node):
         right_child = cur_node.right_child
         right_child.parent = None
         self.root = right_child
-        
+
     def _delleteIfHasNot(self, parent, cur_node):
         if cur_node.isRightChild():
             parent.right_child = None
         else:
             parent.left_child = None
-                  
+
     def _delleteIfHasBoth(self, parent, cur_node):
         left_child = cur_node.left_child
         right_child = cur_node.right_child
@@ -223,7 +219,7 @@ class BinarySearchTree:
             parent.left_child = right_child
             right_child.left_child = left_child
             left_child.parent = right_child
-             
+
     def _delleteIfHasLeft(self, parent, cur_node):
         left_child = cur_node.left_child
         left_child.parent = parent
@@ -233,33 +229,36 @@ class BinarySearchTree:
         right_child = cur_node.right_child
         right_child.parent = parent
         parent.right_child = right_child
-        
+
     def _find_min(self, cur_node):
         if cur_node.left_child:
             cur_node = cur_node.left_child
             return self._find_min(cur_node)
         return cur_node
-    
+
     def count_node(self):
         return self.count
-    
+
     def hight_tree(self):
         return self._hight_tree(self.root)
-    
+
     def _hight_tree(self, cur_node):
         if cur_node:
-            return max(self._hight_tree(cur_node.left_child), self._hight_tree(cur_node.right_child)) + 1
-        return 0 
-    
+            return (
+                max(
+                    self._hight_tree(cur_node.left_child),
+                    self._hight_tree(cur_node.right_child),
+                )
+                + 1
+            )
+        return 0
+
     def width_tree(self):
         return self._width_tree(self.root, 0, {})
-        
-    
+
     def _width_tree(self, cur_node, floor, width_list):
         if cur_node:
             width_list[floor] = width_list.get(floor, 0) + 1
             self._width_tree(cur_node.right_child, floor + 1, width_list)
             self._width_tree(cur_node.left_child, floor + 1, width_list)
             return max(width_list.values())
-
-        
